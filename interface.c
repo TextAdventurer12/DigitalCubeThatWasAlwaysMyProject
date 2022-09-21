@@ -18,7 +18,7 @@ void displayFace(cube* cube, int face)
 
 void displayCube(cube* cube)
 {
-    loop(i, 9)
+    loop(i, 6)
     {
         displayFace(cube, i);
     }
