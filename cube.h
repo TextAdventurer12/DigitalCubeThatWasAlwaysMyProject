@@ -26,6 +26,7 @@ typedef struct
     int colour;
 } sticker;
 namedVector(sticker, cube);
+namedVector(sticker, face);
 vector(cube);
 // custom cube vector functions
 void destroyCubeVector(cubeVector* this);

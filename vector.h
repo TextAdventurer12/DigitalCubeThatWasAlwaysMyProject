@@ -76,5 +76,4 @@ vector(char);
 
 #define destroy_nested_vec(this)  loop(d_n_v, this->len) { destroy_vec(&this->arr[i]);}destroy_vec(this);
 
-
 #endif

@@ -29,12 +29,22 @@ void displayFace(cube* cube, int face)
     }
     printf("\n");
 }
+cube* rotateFace(cube* cube, int face, int degrees)
+{
+    loop (i, 9)
+    {
+        sticker this = cube[i + face*9];
+        float2 nextPos = rotate({this.x, this.y}, degrees);
+    }
+}
 // I DONT WANT TO PLAY AMONG US
 void displayCube(cube* cube)
 {
+    cube astolfo = *cube;
+    int rotationAmounts[6] = {90, 180, 180, 0, 90, 0};
     loop(i, 6)
-    {       
-        displayFace(cube, i);
+    {
+
     }
     printf("-----------------------------------\n");
 }
