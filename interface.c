@@ -3,6 +3,20 @@
 #include "colours.h"
 #include "vector.h"
 
+/*
+
+      G G G
+      G G G
+      G G G
+R R R Y Y Y O O O W W W
+R R R Y Y Y O O O W W W
+R R R Y Y Y O O O W W W
+      B B B
+      B B B
+      B B B
+
+*/
+// this is basically fine just rotate the face so that 0, 0 is in the right spot beforehand
 void displayFace(cube* cube, int face)
 {
     loop(i, 3)
@@ -15,11 +29,11 @@ void displayFace(cube* cube, int face)
     }
     printf("\n");
 }
-
+// I DONT WANT TO PLAY AMONG US
 void displayCube(cube* cube)
 {
     loop(i, 6)
-    {
+    {       
         displayFace(cube, i);
     }
     printf("-----------------------------------\n");
@@ -29,13 +43,7 @@ movePointer charToFunc(char funcType, char prime)
 {
     char funcNames[6] = { 'R', 'L', 'U', 'D', 'F', 'B' };
     movePointer susbus[12] = { R, L, U, D, F, B, RP, LP, UP, DP, FP, BP};
-    loop(i, 6)
-    {
-        if (funcType == funcNames[i])
-        {
-            return susbus[i + (prime * 6)];
-        }
-    }
+    loop(i, 6) if (funcType == funcNames[i]) return susbus[i + (prime * 6)];
     return -1;
 }
 movePointerVector stringToFunc(charVector funcType, charVector prime)
