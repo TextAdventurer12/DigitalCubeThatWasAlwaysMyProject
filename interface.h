@@ -9,6 +9,6 @@ vector(movePointer);
 void displayFace(cube* cube, int face);
 void displayCube(cube* cube);
 movePointer charToFunc(char funcType, char prime);
-movePointerVector stringToFunc(charVector funcTypes, charVector primes);
+movePointerVector* stringToFunc(charVector funcTypes, charVector primes);
 
 #endif

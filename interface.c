@@ -33,14 +33,14 @@ cube* rotateFace(cube* cube, int face, int degrees)
 {
     loop (i, 9)
     {
-        sticker this = cube[i + face*9];
-        float2 nextPos = rotate({this.x, this.y}, degrees);
+        sticker this = cube->arr[i + face*9];
+        float2 nextPos = rotate((float2){this.x, this.y}, degrees);
     }
 }
 // I DONT WANT TO PLAY AMONG US
 void displayCube(cube* cube)
 {
-    cube astolfo = *cube;
+    cube this = *cube;
     int rotationAmounts[6] = {90, 180, 180, 0, 90, 0};
     loop(i, 6)
     {
@@ -54,9 +54,9 @@ movePointer charToFunc(char funcType, char prime)
     char funcNames[6] = { 'R', 'L', 'U', 'D', 'F', 'B' };
     movePointer susbus[12] = { R, L, U, D, F, B, RP, LP, UP, DP, FP, BP};
     loop(i, 6) if (funcType == funcNames[i]) return susbus[i + (prime * 6)];
-    return -1;
+    return (void*)0;
 }
-movePointerVector stringToFunc(charVector funcType, charVector prime)
+movePointerVector* stringToFunc(charVector* funcType, charVector* prime)
 {
     if (funcType->len != prime->len) exit(2);
     make_vec(demonWaifus, movePointerVector);

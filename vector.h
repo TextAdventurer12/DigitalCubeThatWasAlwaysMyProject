@@ -9,7 +9,7 @@
 #define loop(var, max) for(int var=0;var<max;var++)
 
 #define vector(T) typedef struct { T* arr; unsigned int len; }T##Vector;
-#define namedVector(T, name) typedef struct {T* arr; unsigned int len}name;
+#define namedVector(T, name) typedef struct {T* arr; unsigned int len} name;
 
 // Initialises a vector
 // Name is the name of the vector being made

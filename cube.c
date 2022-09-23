@@ -159,7 +159,7 @@ int getRotation(movePointer f)
 float2 rotate(float2 pos, int degrees)
 {
 
-    degrees *= (3.14159 / 180);
+    //degrees *= (3.14159 / 180);
     float2 out;
     out = (float2){roundf((pos.x-1) * cos(degrees) - (pos.y-1) * sin(degrees) + 1), roundf((pos.y-1) * cos(degrees) + (pos.x-1) * sin(degrees) + 1)};
     return out;
