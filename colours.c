@@ -14,8 +14,8 @@ char* setBackground(int colour)
 {
     if (colour == 0) { return WHTB; }
     if (colour == 1) { return BLUB; }
-    if (colour == 2) { return GRNB; }
-    if (colour == 3) { return YELB; }
+    if (colour == 3) { return GRNB; }
+    if (colour == 2) { return YELB; }
     if (colour == 4) { return MAGB; }
     if (colour == 5) { return REDB; }
     else { return CRESET; }

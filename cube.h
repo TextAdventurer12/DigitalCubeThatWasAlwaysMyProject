@@ -14,7 +14,7 @@
 #define MEETS_CONDITION(in, out, condition)         \
         loop(i, in->len)                            \
         {                                           \
-            typeof(in->arr[0]) this = in->arr[i];   \
+            typeof(in->arr[i]) this = in->arr[i];   \
             if (condition) push_back(out, i)        \
         }
 
@@ -25,11 +25,10 @@ typedef struct
     int face;
     int colour;
 } sticker;
-namedVector(sticker, cube);
+namedVector(sticker, Cube);
+typedef struct { sticker* arr; unsigned int len; } sus;
 namedVector(sticker, face);
-vector(cube);
-// custom cube vector functions
-void destroyCubeVector(cubeVector* this);
+vector(Cube);
 
 typedef struct
 {
@@ -47,8 +46,8 @@ vector(float2);
 typedef sticker (*movePointer)(sticker);
 typedef int2 (*fixedTranslate)(int2);
 
-cube* makeCube();
-cube* shift(cube* cube, movePointer move);
+Cube* makeCube();
+Cube* shift(Cube* cube, movePointer move);
 int2 morphY(int2 pos);
 int2 morphX(int2 pos);
 int2 flip  (int2 pos);
@@ -65,14 +64,14 @@ sticker F (sticker x);
 sticker FP(sticker x);
 sticker B (sticker x);
 sticker BP(sticker x);
-intVector* getID (cube* cube, movePointer f);
-intVector* getRID(cube* cube);
-intVector* getUID(cube* cube);
-intVector* getDID(cube* cube);
-intVector* getFID(cube* cube);
-intVector* getLID(cube* cube);
-intVector* getBID(cube* cube);
-intVector* getFaceID(cube* cube, int face);
+intVector* getID (Cube* cube, movePointer f);
+intVector* getRID(Cube* cube);
+intVector* getUID(Cube* cube);
+intVector* getDID(Cube* cube);
+intVector* getFID(Cube* cube);
+intVector* getLID(Cube* cube);
+intVector* getBID(Cube* cube);
+intVector* getFaceID(Cube* cube, int face);
 int getFace(movePointer f);
 int roll(int value, int max);
 int getRotation(movePointer f);

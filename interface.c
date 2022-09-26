@@ -17,36 +17,84 @@ R R R Y Y Y O O O W W W
 
 */
 // this is basically fine just rotate the face so that 0, 0 is in the right spot beforehand
-void displayFace(cube* cube, int face)
+void displayFace(Cube* cubeState, int face)
 {
     loop(i, 3)
     {
         loop(j, 3)
         {
-            printf("%s %d", setBackground(face), cube->arr[(face * 9) + (j + i * 3)].colour);
+            printf("%s %d", setBackground(face), cubeState->arr[(face * 9) + (j + i * 3)].colour);
         }
+        printf("%s", setBackground(-1));
         printf("\n");
     }
-    printf("\n");
 }
-cube* rotateFace(cube* cube, int face, int degrees)
+Cube* rotateFace(Cube* cubeState, int face, int degrees)
 {
     loop (i, 9)
     {
-        sticker this = cube->arr[i + face*9];
+        sticker this = cubeState->arr[i + face*9];
         float2 nextPos = rotate((float2){this.x, this.y}, degrees);
+        cubeState->arr[i + face*9].x = nextPos.x;
+        cubeState->arr[i + face*9].x = nextPos.y;
     }
+    return cubeState;
 }
 // I DONT WANT TO PLAY AMONG US
-void displayCube(cube* cube)
+void displayCube(Cube* cubeState)
 {
-    cube this = *cube;
+    Cube this = *cubeState;
     int rotationAmounts[6] = {90, 180, 180, 0, 90, 0};
     loop(i, 6)
     {
-
+        this = *(rotateFace(&this, i, rotationAmounts[i]));
     }
-    printf("-----------------------------------\n");
+    loop(i, 3)
+    {
+        printf("      ");
+        loop(j ,3)
+        {
+            printf("%s", setBackground(this.arr[j+i*3+(GREEN*9)].colour));
+            printf("%d ", this.arr[j+i*3+(GREEN*9)].colour);
+       }
+        printf("%s", setBackground(-1));
+        printf("\n");
+    }
+    int faces[4] = { RED, YELLOW, ORANGE, WHITE};
+    loop(i, 3)
+    {
+        loop(j, 4)
+        {
+            loop(k, 3)
+            {
+                printf("%s", setBackground(this.arr[k+i*3+(faces[j]*9)].colour));
+                printf("%d ", this.arr[k+i*3+(faces[j]*9)].colour);
+            }
+        }
+        printf("%s", setBackground(-1));
+        printf("\n");
+    }
+    loop(i, 3)
+    {
+        printf("      ");
+        loop(j ,3)
+        {
+            printf("%s", setBackground(this.arr[j+i*3+(BLUE*9)].colour));
+            printf("%d ", this.arr[j+i*3+(BLUE*9)].colour);
+       }
+        printf("%s", setBackground(-1));
+        printf("\n");
+    }
+    //printf("      %d %d %d\n");
+    //printf("      %d %d %d\n");
+    //printf("      %d %d %d\n");
+    //printf("%d %d %d %d %d %d %d %d %d %d %d %d\n");
+    //printf("%d %d %d %d %d %d %d %d %d %d %d %d\n");
+    //printf("%d %d %d %d %d %d %d %d %d %d %d %d\n");
+    //printf("      %d %d %d\n");
+    //printf("      %d %d %d\n");
+    //printf("      %d %d %d\n");
+    //printf("-----------------------------------\n");
 }
 
 movePointer charToFunc(char funcType, char prime)

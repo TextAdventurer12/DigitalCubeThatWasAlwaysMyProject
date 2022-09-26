@@ -3,9 +3,9 @@
 #include <stdio.h>
 #include "vector.h"
 
-cube* makeCube()
+Cube* makeCube()
 {
-    make_vec(cube, cube);
+    make_vec(cubeState, Cube);
     loop(i, 6)
     {
         loop(j, 3)
@@ -13,18 +13,19 @@ cube* makeCube()
             loop(k, 3)
             {
                 sticker _stck = (sticker){k, j,  i, i};
-                push_back(cube, _stck);
+                push_back(cubeState, _stck);
             }
         }
     }
+    return cubeState;
 }
 
-intVector* getUID(cube* cube)
+intVector* getUID(Cube* cubeState)
 {
     make_vec(ids, intVector);
-    for (int i = 0; i < cube->len; i++)
+    for (int i = 0; i < cubeState->len; i++)
     {
-        sticker* this = &cube->arr[i];
+        sticker* this = &cubeState->arr[i];
         printf("%d\n", i);
         if (this->y == 0 && this->face != YELLOW && this->face != WHITE)
         {
@@ -34,63 +35,69 @@ intVector* getUID(cube* cube)
     //MEETS_CONDITION(cube, ids, this.y == 0 && this.face != YELLOW && this.face != WHITE);
     return ids;
 }
-intVector* getFID(cube* cube)
+intVector* getFID(Cube* cubeState)
 {
     make_vec(ids, intVector);
-    MEETS_CONDITION(cube, ids, (this.face == WHITE && this.y == 0) || (this.face == YELLOW && this.y == 2) || (this.face == RED && this.x == 2) || (this.face == ORANGE && this.x == 0));
+    MEETS_CONDITION(cubeState, ids, (this.face == WHITE && this.y == 0) || (this.face == YELLOW && this.y == 2) || (this.face == RED && this.x == 2) || (this.face == ORANGE && this.x == 0));
     return ids;
 }
-intVector* getDID(cube* cube)
+intVector* getDID(Cube* cubeState)
 {
     make_vec(ids ,intVector);
-    MEETS_CONDITION(cube, ids, this.y == 2 && this.face != YELLOW && this.face != WHITE);
+    MEETS_CONDITION(cubeState, ids, this.y == 2 && this.face != YELLOW && this.face != WHITE);
     return ids;
 }
-intVector* getBID(cube* cube)
+intVector* getBID(Cube* cubeState)
 {
     make_vec(ids, intVector);
-    MEETS_CONDITION(cube, ids, (this.face == WHITE && this.y == 2) || (this.face == YELLOW && this.y == 0) || (this.face == RED && this.x == 0) || (this.face == ORANGE && this.x == 2));
+    MEETS_CONDITION(cubeState, ids, (this.face == WHITE && this.y == 2) || (this.face == YELLOW && this.y == 0) || (this.face == RED && this.x == 0) || (this.face == ORANGE && this.x == 2));
     return ids;
 }
-intVector* getRID(cube* cube)
+intVector* getRID(Cube* cubeState)
 {
     make_vec(ids, intVector);
-    MEETS_CONDITION(cube, ids, (this.face == GREEN && this.x == 2) || (this.x == 0 && this.face != RED && this.face != ORANGE && this.face != GREEN));
+    MEETS_CONDITION(cubeState, ids, (this.face == GREEN && this.x == 2) || (this.x == 0 && this.face != RED && this.face != ORANGE && this.face != GREEN));
     return ids;
 }
-intVector* getLID(cube* cube)
+intVector* getLID(Cube* cubeState)
 {
     make_vec(ids, intVector);
-    MEETS_CONDITION(cube, ids, (this.face == GREEN && this.x == 0) || (this.x == 2 && this.face != RED && this.face != ORANGE && this.face != GREEN));
+    MEETS_CONDITION(cubeState, ids, (this.face == GREEN && this.x == 0) || (this.x == 2 && this.face != RED && this.face != ORANGE && this.face != GREEN));
     return ids;
 }
 
-intVector* getID (cube* cube, movePointer f)
+intVector* getID (Cube* cubeState, movePointer f)
 {
     int face = f((sticker){0, 0, WHITE, WHITE}).face;
     switch (face)
     {
         case WHITE:
-            return getUID(cube);
+            return getUID(cubeState);
         case BLUE:
-            return getFID(cube);
+            return getFID(cubeState);
         case YELLOW:
-            return getDID(cube);
+            return getDID(cubeState);
         case GREEN:
-            return getBID(cube);
+            return getBID(cubeState);
         case ORANGE:
-            return getRID(cube);
+            return getRID(cubeState);
         case RED:
-            return getLID(cube);
+            return getLID(cubeState);
         default:
             exit(1);
     }
 }
 
-intVector* getFaceID(cube* cube, int face)
+intVector* getFaceID(Cube* cubeState, int face)
 {
     make_vec(ids, intVector);
-    MEETS_CONDITION(cube, ids, this.face == face);
+    //MEETS_CONDITION(cubeState, ids, this.face == face);
+    loop(i, cubeState->len)
+    {
+        sticker this = cubeState->arr[i];
+        printf("%d\n", this.colour);
+        if (this.face == face) push_back(ids, i);
+    }
     printf("sus\n");
     return ids;
 }
@@ -165,26 +172,26 @@ float2 rotate(float2 pos, int degrees)
     return out;
 }
 
-cube* shift(cube* cube, movePointer move)
+Cube* shift(Cube* cubeState, movePointer move)
 {
     printf("what the sus");
-    intVector* targetIDs = getID(cube, move);
+    intVector* targetIDs = getID(cubeState, move);
     printf("Line IDs got\n");
-    intVector* faceIDs = getFaceID(cube, getFace(move));
+    intVector* faceIDs = getFaceID(cubeState, getFace(move));
     printf("Face IDs got\n");
     loop(i, targetIDs->len)
     {
         printf("%d\n", i);
-        sticker* this = &cube->arr[targetIDs->arr[i]];
+        sticker* this = &cubeState->arr[targetIDs->arr[i]];
         *this = move(*this);
     }
     destroy_vec(targetIDs);
     loop(i, faceIDs->len)
     {
-        sticker* this = &cube->arr[faceIDs->arr[i]];
+        sticker* this = &cubeState->arr[faceIDs->arr[i]];
         float2 dest = rotate((float2){this->x, this->y}, getRotation(move));
         *this = (sticker){roundf(dest.x), roundf(dest.y), this->face, this->colour};
     }
     destroy_vec(faceIDs);
-    return cube;
+    return cubeState;
 }
