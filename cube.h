@@ -15,7 +15,7 @@
         loop(i, in->len)                            \
         {                                           \
             typeof(in->arr[i]) this = in->arr[i];   \
-            if (condition) push_back(out, i)        \
+            if (condition) {push_back(out, i)}      \
         }
 
 typedef struct

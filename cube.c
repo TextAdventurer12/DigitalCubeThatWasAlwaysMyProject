@@ -26,7 +26,6 @@ intVector* getUID(Cube* cubeState)
     for (int i = 0; i < cubeState->len; i++)
     {
         sticker* this = &cubeState->arr[i];
-        printf("%d\n", i);
         if (this->y == 0 && this->face != YELLOW && this->face != WHITE)
         {
             push_back(ids,  i);
@@ -92,13 +91,14 @@ intVector* getFaceID(Cube* cubeState, int face)
 {
     make_vec(ids, intVector);
     //MEETS_CONDITION(cubeState, ids, this.face == face);
-    loop(i, cubeState->len)
+    for (int i = 0; i < cubeState->len; i++)
     {
         sticker this = cubeState->arr[i];
-        printf("%d\n", this.colour);
-        if (this.face == face) push_back(ids, i);
+        if (this.face == face)
+	{
+	    push_back(ids, i);
+	}
     }
-    printf("sus\n");
     return ids;
 }
 
@@ -117,6 +117,7 @@ int roll(int value, int max)
 {
     while (value >= max) value -= max;
     while (value < 0) value += max;
+    return value;
 }
 int2 flip  (int2 pos)
 {
@@ -152,7 +153,7 @@ sticker UP(sticker x)
 sticker RP(sticker x) { return R(R(R(x))); }
 sticker L (sticker x) { return R(x); }
 sticker LP(sticker x) { return L(L(L(x))); }
-sticker U (sticker x) { return U(U(U(x))); }
+sticker U (sticker x) { return UP(UP(UP(x))); }
 sticker D (sticker x) { return U(x); }
 sticker DP(sticker x) { return D(D(D(x))); }
 sticker FP(sticker x) { return F(F(F(x))); }
@@ -174,16 +175,14 @@ float2 rotate(float2 pos, int degrees)
 
 Cube* shift(Cube* cubeState, movePointer move)
 {
-    printf("what the sus");
     intVector* targetIDs = getID(cubeState, move);
-    printf("Line IDs got\n");
     intVector* faceIDs = getFaceID(cubeState, getFace(move));
-    printf("Face IDs got\n");
     loop(i, targetIDs->len)
     {
-        printf("%d\n", i);
         sticker* this = &cubeState->arr[targetIDs->arr[i]];
+        printf("%d(%d), ", cubeState->arr[targetIDs->arr[i]].face, this->face);
         *this = move(*this);
+	printf("%d(%d)\n", cubeState->arr[targetIDs->arr[i]].face, this->face);
     }
     destroy_vec(targetIDs);
     loop(i, faceIDs->len)

@@ -43,19 +43,19 @@ Cube* rotateFace(Cube* cubeState, int face, int degrees)
 // I DONT WANT TO PLAY AMONG US
 void displayCube(Cube* cubeState)
 {
-    Cube this = *cubeState;
+    loop(i,6) displayFace(cubeState, i);
     int rotationAmounts[6] = {90, 180, 180, 0, 90, 0};
     loop(i, 6)
     {
-        this = *(rotateFace(&this, i, rotationAmounts[i]));
+        rotateFace(cubeState, i, rotationAmounts[i]);
     }
     loop(i, 3)
     {
         printf("      ");
         loop(j ,3)
         {
-            printf("%s", setBackground(this.arr[j+i*3+(GREEN*9)].colour));
-            printf("%d ", this.arr[j+i*3+(GREEN*9)].colour);
+            printf("%s", setBackground(cubeState->arr[j+i*3+(GREEN*9)].colour));
+            printf("%d ", cubeState->arr[j+i*3+(GREEN*9)].colour);
        }
         printf("%s", setBackground(-1));
         printf("\n");
@@ -67,8 +67,8 @@ void displayCube(Cube* cubeState)
         {
             loop(k, 3)
             {
-                printf("%s", setBackground(this.arr[k+i*3+(faces[j]*9)].colour));
-                printf("%d ", this.arr[k+i*3+(faces[j]*9)].colour);
+                printf("%s", setBackground(cubeState->arr[k+i*3+(faces[j]*9)].colour));
+                printf("%d ", cubeState->arr[k+i*3+(faces[j]*9)].colour);
             }
         }
         printf("%s", setBackground(-1));
@@ -79,11 +79,15 @@ void displayCube(Cube* cubeState)
         printf("      ");
         loop(j ,3)
         {
-            printf("%s", setBackground(this.arr[j+i*3+(BLUE*9)].colour));
-            printf("%d ", this.arr[j+i*3+(BLUE*9)].colour);
+            printf("%s", setBackground(cubeState->arr[j+i*3+(BLUE*9)].colour));
+            printf("%d ", cubeState->arr[j+i*3+(BLUE*9)].colour);
        }
         printf("%s", setBackground(-1));
         printf("\n");
+    }
+    loop(i, 6)
+    {
+	rotateFace(cubeState, i, 360-rotationAmounts[i]);
     }
     //printf("      %d %d %d\n");
     //printf("      %d %d %d\n");
@@ -101,8 +105,10 @@ movePointer charToFunc(char funcType, char prime)
 {
     char funcNames[6] = { 'R', 'L', 'U', 'D', 'F', 'B' };
     movePointer susbus[12] = { R, L, U, D, F, B, RP, LP, UP, DP, FP, BP};
-    loop(i, 6) if (funcType == funcNames[i]) return susbus[i + (prime * 6)];
-    return (void*)0;
+    int index = -1;
+    loop(i, 6) if (funcType == funcNames[i]) index = i + (prime * 6);
+    printf("%d\n", index);
+    return susbus[index];
 }
 movePointerVector* stringToFunc(charVector* funcType, charVector* prime)
 {
