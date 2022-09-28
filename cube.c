@@ -67,24 +67,13 @@ intVector* getLID(Cube* cubeState)
 
 intVector* getID (Cube* cubeState, movePointer f)
 {
-    int face = f((sticker){0, 0, WHITE, WHITE}).face;
-    switch (face)
-    {
-        case WHITE:
-            return getUID(cubeState);
-        case BLUE:
-            return getFID(cubeState);
-        case YELLOW:
-            return getDID(cubeState);
-        case GREEN:
-            return getBID(cubeState);
-        case ORANGE:
-            return getRID(cubeState);
-        case RED:
-            return getLID(cubeState);
-        default:
-            exit(1);
-    }
+    if (f == U || f == UP) return getUID(cubeState);
+    if (f == D || f == DP) return getDID(cubeState);
+    if (f == F || f == FP) return getFID(cubeState);
+    if (f == B || f == BP) return getBID(cubeState);
+    if (f == L || f == LP) return getLID(cubeState);
+    if (f == R || f == RP) return getRID(cubeState);
+    exit(1);
 }
 
 intVector* getFaceID(Cube* cubeState, int face)
@@ -94,12 +83,24 @@ intVector* getFaceID(Cube* cubeState, int face)
     for (int i = 0; i < cubeState->len; i++)
     {
         sticker this = cubeState->arr[i];
-        if (this.face == face)
-	{
-	    push_back(ids, i);
-	}
+        if (this.face == face)	{push_back(ids, i);}
     }
-    return ids;
+    make_vec(out, intVector);
+    for (int i = 0; i < 3; i++)
+    {
+        for (int j = 0; j < 3; j++)
+        {
+            for (int k = 0; k < ids->len; k++)
+            {
+                if (cubeState->arr[ids->arr[k]].x == j && cubeState->arr[ids->arr[k]].y == i)
+                {
+                    push_back(out, ids->arr[k]);
+                }            
+            }
+        }
+    }
+    destroy_vec(ids)
+    return out;
 }
 
 int getFace(movePointer f)
@@ -119,10 +120,7 @@ int roll(int value, int max)
     while (value < 0) value += max;
     return value;
 }
-int2 flip  (int2 pos)
-{
-    return (int2){2-pos.x, 2-pos.y};
-}
+int2 flip  (int2 pos) { return (int2){2-pos.x, 2-pos.y}; }
 int2 morphX(int2 pos) { return (int2){pos.y, 2 - pos.x}; }
 int2 morphY(int2 pos) { return (int2){2 - pos.y, pos.x}; }
 int2 remain(int2 pos) { return pos; }
@@ -130,23 +128,24 @@ int2 remain(int2 pos) { return pos; }
 sticker R (sticker x)
 {
     fixedTranslate funcs[6] = {flip, remain, remain, flip, remain, remain};
-    int2 outputPos = funcs[x.face]((int2){x.x,  x.y});
     int face = roll(x.face - 1, 4);
-    return (sticker){x.x, x.y, face, x.colour};
+    int2 _o = {x.x, x.y};
+    _o = funcs[x.face](_o);
+    return (sticker){_o.x, _o.y, face, x.colour};
 }
 sticker F (sticker x)
 {
     fixedTranslate funcs[6] = {morphY, remain, morphY, remain, morphY, morphY};
-    int2 outPos = funcs[x.face]((int2){x.x, x.y});
     float y = 0;
     float c[6] = { 5, -16.0167, 18.2917, -7.4167, 1.2083, -0.0667};
+    int2 outPos = funcs[x.face]((int2){x.x, x.y});
     POLYNOMIAL(6, y, x.face, c);
     return (sticker){outPos.x, outPos.y, roundf(y), x.colour};
 }
 sticker UP(sticker x)
 {
     float y = 0;
-    float c[6] = { 0, 27.6833, -38.9583, 20.4583, 0.3583 };
+    float c[6] = { 0, 23.1167, -33.125, 17.5833, -3.875, 0.3};
     POLYNOMIAL(6, y, x.face, c);
     return (sticker){ x.x, x.y, roundf(y), x.colour};
 }
@@ -177,12 +176,11 @@ Cube* shift(Cube* cubeState, movePointer move)
 {
     intVector* targetIDs = getID(cubeState, move);
     intVector* faceIDs = getFaceID(cubeState, getFace(move));
+    printf("%d, %d\n", targetIDs->len, faceIDs->len);
     loop(i, targetIDs->len)
     {
         sticker* this = &cubeState->arr[targetIDs->arr[i]];
-        printf("%d(%d), ", cubeState->arr[targetIDs->arr[i]].face, this->face);
         *this = move(*this);
-	printf("%d(%d)\n", cubeState->arr[targetIDs->arr[i]].face, this->face);
     }
     destroy_vec(targetIDs);
     loop(i, faceIDs->len)

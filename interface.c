@@ -19,13 +19,17 @@ R R R Y Y Y O O O W W W
 // this is basically fine just rotate the face so that 0, 0 is in the right spot beforehand
 void displayFace(Cube* cubeState, int face)
 {
+    intVector* ids = getFaceID(cubeState, face);
     loop(i, 3)
     {
         loop(j, 3)
         {
-            printf("%s %d", setBackground(face), cubeState->arr[(face * 9) + (j + i * 3)].colour);
+            sticker this = cubeState->arr[ids->arr[j+i*3]];
+            printf("%s %d", setBackground(this.colour), this.colour);
+            printf("%s", setBackground(-1));
+            if (this.face != face) printf("INCORRECT FACE ERROR AT: %d\n", face*9+j+i*3);
         }
-        printf("%s", setBackground(-1));
+        
         printf("\n");
     }
 }
@@ -49,13 +53,14 @@ void displayCube(Cube* cubeState)
     {
         rotateFace(cubeState, i, rotationAmounts[i]);
     }
+    intVector* greenIDs = getFaceID(cubeState, GREEN);
     loop(i, 3)
     {
         printf("      ");
         loop(j ,3)
         {
-            printf("%s", setBackground(cubeState->arr[j+i*3+(GREEN*9)].colour));
-            printf("%d ", cubeState->arr[j+i*3+(GREEN*9)].colour);
+            //printf("%s", setBackground(cubeState->arr[greenIDs->arr[j+i*3]].colour));
+            printf("%d ", cubeState->arr[greenIDs->arr[j+i*3]].x);
        }
         printf("%s", setBackground(-1));
         printf("\n");

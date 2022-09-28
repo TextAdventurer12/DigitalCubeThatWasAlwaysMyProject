@@ -10,7 +10,7 @@
 #define ORANGE 4
 #define RED 5
 
-#define POLYNOMIAL(degree, y, x, c) loop(i, degree) y+=c[i]*pow(x,i)
+#define POLYNOMIAL(degree, y, x, c) loop(i, degree) y+=c[i]*pow(x,i);
 #define MEETS_CONDITION(in, out, condition)         \
         loop(i, in->len)                            \
         {                                           \
